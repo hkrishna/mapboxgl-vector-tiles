@@ -5,7 +5,7 @@
     <title>Maps powered by Mapbox-gl and vector PBF tiles</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.7.0/mapbox-gl.js'></script>
-    <script src="https://cdn.rawgit.com/mapzen/ui/0.1.1/components/bug/bug.js"></script>
+    <script src='//s3.amazonaws.com/assets-staging.mapzen.com/ui/components/bug/bug.min.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.7.0/mapbox-gl.css' rel='stylesheet' />
     <style>
         body { margin:0; padding:0; }
@@ -391,7 +391,8 @@ map.addControl(new mapboxgl.Navigation());
 var mzBug = new MapzenBug({
   name: 'Maps using Mapbox-gl and vector PBF tiles',
   link: 'https://github.com/mapzen/mapboxgl-vector-tiles',
-  twitterShareMsg: 'Wow, what cool demo by @mapzen.'
+  tweet: 'Tangram map using @mapzen vector tiles and Mapbox GL!',
+  repo: 'https://github.com/mapzen/mapboxgl-vector-tiles/'
 });
 </script>
 
