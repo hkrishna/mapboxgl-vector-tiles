@@ -2,18 +2,36 @@
 <html>
 <head>
     <meta charset='utf-8' />
-    <title></title>
+    <title>Maps powered by Mapbox-gl and vector PBF tiles</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.7.0/mapbox-gl.js'></script>
+    <script src='//s3.amazonaws.com/assets-staging.mapzen.com/ui/components/bug/bug.min.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.7.0/mapbox-gl.css' rel='stylesheet' />
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
+        .info {
+          position: absolute;
+          bottom: 0px;
+          right: 0px;
+          background: #fff;
+          background: rgba(255, 255, 255, 0.8);
+          margin: 0;
+          padding: 0px 5px;
+          font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+          font-size: 11px;
+        }
     </style>
 </head>
 <body>
 
 <div id='map'></div>
+<div class='info'>
+  <a href='https://www.mapbox.com/mapbox-gl/' target='_blank'>Mapbox GL</a> |
+  © <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap contributors</a> |
+  <a href='https://mapzen.com/projects/vector-tiles' title='Tiles courtesy of Mapzen' target='_blank'>Mapzen</a>
+</div>
+
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiYmNhbXBlciIsImEiOiJWUmh3anY0In0.1fgSTNWpQV8-5sBjGbBzGg';
 var simple = {
@@ -62,7 +80,7 @@ var simple = {
   "sources": {
     "osm": {
       "type": "vector",
-      "tiles": ["https://vector.mapzen.com/osm/all/{z}/{x}/{y}.mapbox"]
+      "tiles": ["https://vector.mapzen.com/osm/all/{z}/{x}/{y}.mvt?api_key=vector-tiles-LM25tq4"]
     }
   },
   "layers": [{
@@ -98,7 +116,7 @@ var simple = {
     "type": "fill",
     "source": "osm",
     "source-layer": "landuse",
-    "min-zoom": 6,
+    "minzoom": 6,
     "filter": ["in", "kind", "park", "forest", "garden", "grass", "farm", "meadow", "playground", "golf_course", "nature_reserve", "wetland", "wood", "cemetery"],
     "paint": {
       "fill-color": "@park"
@@ -108,7 +126,7 @@ var simple = {
     "source": "osm",
     "source-layer": "water",
     "type": "line",
-    "min-zoom": 6,
+    "minzoom": 6,
     "filter": ["all", ["==", "$type", "LineString"], ["==", "kind", "river"]],
     "layout": {
         "line-cap": "round",
@@ -126,7 +144,7 @@ var simple = {
     "source": "osm",
     "source-layer": "water",
     "type": "line",
-    "min-zoom": 11,
+    "minzoom": 11,
     "filter": ["all", ["==", "$type", "LineString"], ["==", "kind", "stream", "canal"]],
     "layout": {
         "line-cap": "round",
@@ -145,7 +163,7 @@ var simple = {
       "source-layer": "places",
       "type": "line",
       "filter": ["==", "admin_level", "2"],
-      "max-zoom": 4,
+      "maxzoom": 4,
       "layout": {
         "line-cap": "round",
         "line-join": "round"
@@ -163,7 +181,7 @@ var simple = {
       "source-layer": "places",
       "type": "fill",
       "filter": ["==", "admin_level", "4"],
-      "max-zoom": 10,
+      "maxzoom": 10,
       "layout": {
         "line-cap": "round",
         "line-join": "round"
@@ -261,7 +279,7 @@ var simple = {
       "line-join": "round",
       "line-cap": "round"
     },
-    "min-zoom": 12,
+    "minzoom": 12,
     "paint": {
       "line-color": "@path",
       "line-width": "@path-width",
@@ -272,8 +290,8 @@ var simple = {
     "source": "osm",
     "source-layer": "places",
     "type": "symbol",
-    "min-zoom": 2,
-    "max-zoom": 6,
+    "minzoom": 2,
+    "maxzoom": 6,
     "filter": ["==", "kind", "ocean"],
     "layout": {
         "text-field": "{name}",
@@ -294,7 +312,7 @@ var simple = {
       "source": "osm",
       "source-layer": "places",
       "filter": ["all", ["==", "$type", "Point"], ["==", "kind", "neighbourhood", "hamlet", "suburb"]],
-      "min-zoom": 12,
+      "minzoom": 12,
       "type": "symbol",
       "layout": {
         "text-field": "{name}",
@@ -314,8 +332,8 @@ var simple = {
       "source": "osm",
       "source-layer": "places",
       "filter": ["all", ["==", "$type", "Point"], ["==", "kind", "city", "county", "district"]],
-      "min-zoom": 10,
-      "max-zoom": 14,
+      "minzoom": 10,
+      "maxzoom": 14,
       "type": "symbol",
       "layout": {
         "text-field": "{name}",
@@ -336,8 +354,8 @@ var simple = {
       "source": "osm",
       "source-layer": "places",
       "filter": ["all", ["==", "$type", "Point"], ["==", "kind", "state"]],
-      "min-zoom": 6,
-      "max-zoom": 12,
+      "minzoom": 6,
+      "maxzoom": 12,
       "type": "symbol",
       "layout": {
         "text-field": "{name}",
@@ -357,7 +375,7 @@ var simple = {
       "source": "osm",
       "source-layer": "places",
       "filter": ["all", ["==", "$type", "Point"], ["==", "kind", "country"]],
-      "max-zoom": 7,
+      "maxzoom": 7,
       "type": "symbol",
       "layout": {
         "text-field": "{name}",
@@ -379,12 +397,20 @@ var simple = {
 var map = new mapboxgl.Map({
   container: 'map',
   style: simple,
-  zoom: 12,
+  zoom: 15,
   minZoom: 2,
-  center: [40.7258, -73.9806]
+  center: [38.9075, -77.0351]
 });
 
 map.addControl(new mapboxgl.Navigation());
+
+// initialize mapzen bug
+var mzBug = new MapzenBug({
+  name: 'Maps using Mapbox-gl and vector PBF tiles',
+  link: 'https://github.com/mapzen/mapboxgl-vector-tiles',
+  tweet: 'Tangram map using @mapzen vector tiles and Mapbox GL!',
+  repo: 'https://github.com/mapzen/mapboxgl-vector-tiles/'
+});
 </script>
 
 </body>
